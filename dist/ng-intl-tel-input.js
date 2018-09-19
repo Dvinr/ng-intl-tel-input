@@ -80,10 +80,13 @@ angular.module('ngIntlTelInput')
 
           function formatter(value) {
             if (value) {
-              if(value.charAt(0) !== '+') {
-                value = '+' + value;
-              }
+              // adding a missing + when there is a initial/default country mangles the input
+              // if(value.charAt(0) !== '+') {
+              //   value = '+' + value;
+              // }
               elm.intlTelInput('setNumber', value);
+              // return the formatted value instead of the raw input value
+              return elm.val();
             }
             return value;
           }
