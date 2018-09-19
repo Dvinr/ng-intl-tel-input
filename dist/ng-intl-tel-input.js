@@ -1,4 +1,5 @@
-angular.module('ngIntlTelInput', []);angular.module('ngIntlTelInput')
+angular.module('ngIntlTelInput', []);
+angular.module('ngIntlTelInput')
   .provider('ngIntlTelInput', function () {
     var me = this;
     var props = {};
@@ -24,6 +25,7 @@ angular.module('ngIntlTelInput', []);angular.module('ngIntlTelInput')
       });
     }];
   });
+
 angular.module('ngIntlTelInput')
   .directive('ngIntlTelInput', ['ngIntlTelInput', '$log', '$window', '$parse',
     function (ngIntlTelInput, $log, $window, $parse) {
@@ -75,8 +77,8 @@ angular.module('ngIntlTelInput')
           ctrl.$parsers.push(function (value) {
             return elm.intlTelInput('getNumber');
           });
-          // Set input value to model value and trigger evaluation.
-          ctrl.$formatters.push(function (value) {
+
+          function formatter(value) {
             if (value) {
               if(value.charAt(0) !== '+') {
                 value = '+' + value;
@@ -84,6 +86,16 @@ angular.module('ngIntlTelInput')
               elm.intlTelInput('setNumber', value);
             }
             return value;
+          }
+          // Set input value to model value and trigger evaluation.
+          ctrl.$formatters.push(formatter);
+
+          // format the input if the phone is valid
+          elm.bind('blur', function() {
+            if(!ctrl.$valid) {
+              return;
+            }
+            formatter(elm.val());
           });
         }
       };
